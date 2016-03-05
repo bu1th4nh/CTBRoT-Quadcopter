@@ -1,0 +1,76 @@
+MWC笔记
+===================================
+◆MultiWii 2.3配置整理
+config.h:
+1.选择四轴或六轴:
+    //#define QUADX   // 4x
+    #define HEX6X // 6x
+2.配置使用GY-521 MPU6050：
+      #define GY_521          // Chinese 6  DOF with  MPU6050, LLC
+3.配置使用HMC5883：
+      #define HMC5883
+4.配置扩展范围电调（例如场效应管）
+    #define EXT_MOTOR_RANGE // ....
+5.在MultiWii.ino中引入RF24库
+--详见代码
+6.MultiWii.cpp中进行修改：
+setup函数：  configureNrfReceiver();  替换configureReceiver();
+loop函数：computeNrfRC(); 替换computeRC();
+7.RF24库修改：
+打开使用SOFTSPI开关：
+  #define SOFTSPI   // Requires library from https://github.com/greiman/DigitalIO
+安装DigitalIO库，链接见上
+8.配置软SPI引脚
+      #elif defined SOFTSPI
+      // change these pins to your liking
+      const uint8_t SOFT_SPI_MISO_PIN = A0; 
+      const uint8_t SOFT_SPI_MOSI_PIN = A1; 
+      const uint8_t SOFT_SPI_SCK_PIN = A2;  
+9.完成!
+===================================
+◆MultiWii引脚用途整理
+D2: 空（NRF：CE）
+D3:Motor4
+D4:空（NRF：CSN）
+D5:Motor6
+D6:Motor5
+D7:空
+D8:BUZZER (overrideable)
+D9:Motor1
+D10:Motor2
+D11:Motor3
+D12:Motor8
+D13:LED (overrideable)
+A0:空（NRF：MISO）
+A1:空（NRF：MOSI）
+A2:Motor7/PSENSORPIN (overrideable)
+A3:VBAT (overrideable)
+A4:SDA
+A5:SCL
+A6:
+A7:
+===================================
+◆OpenLRS模式下的引脚定义：SDO:A0/SDI:A1/SCLK:A2/IRQ:2/nSel:4 ,可做RF库SoftSPI引脚:MISO:A0/MOSI:A1/SCK:A2/CE:2/CSN:4
+===================================
+◆乐之者模型买的N30电机启动电流太大不能使用si2302（A2SHB）驱动，会直接烧毁MOS管，130电机、N20以及天世凯的N30电机则可以驱动。060130补充:试飞后发现无论1个管还是2管并联均会烧管，考虑替换成2505管或大型管
+===================================
+◆N20电机带载电流:2.5~3A（4V），N30估计更大，贴片MOS管大多只支持到4A左右
+===================================
+◆蓝牙设置：需要将波特率设置为115200才能与MWC正常通讯
+进AT指令两种方法：
+1.WEAKUP脚置高再上电，LED慢闪(2S一次)，波特率固定为38400
+2.上电后再将WAKEUP置高，LED快闪(1S两次)，波特率为模块当前波特率
+AT指令：
+设置波特率：AT+UART=115200,0,0
+Q1. 设置波特率为115200后，上电再长按Weakup按键无法进入AT模式
+===================================
+◆供电问题:导线和开关电流承受能力差导致输出功率不足产生压降，使得主板掉电，换粗导线并取消开关后得到改善
+===================================
+◆导线:
+===================================
+◆MOS管:1.MOS管是开关工作方式，因此分压降压等方式处理G极不会有任何效果；2.在G极加下拉电阻可以有效防止出现引脚悬空导致的SD极异常导通情况；3.用PWM调速，事实证明可以实现完整的无级调速
+===================================
+◆蓝牙模块对电源要求较高，同时为保证控制的持续性，建议增加升压模块保证稳定操控。
+===================================
+◆N20和N30工作电压最大都只到6V，超过6V发热严重
+
