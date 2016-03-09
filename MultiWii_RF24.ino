@@ -68,10 +68,10 @@ void computeNrfRC() {
 	// Good signal, clear falsafe counter
 	if (failsafeCnt > 20) failsafeCnt -= 20; else failsafeCnt = 0;
 
-	rcData[ROLL] = map(joystick[IDX_JOY1_X], 0, 1023, 1400, 1600);
-	rcData[PITCH] = map(joystick[IDX_JOY2_Y], 0, 1023, 1400, 1600);
+	rcData[ROLL] = map(joystick[IDX_JOY2_X], 0, 1023, 1000, 2000);
+	rcData[PITCH] = map(joystick[IDX_JOY2_Y], 0, 1023, 1000, 2000);
 	rcData[THROTTLE] = map(joystick[IDX_JOY_THROTTLE], 0, 1023, 1000, 2000);
-	rcData[YAW] = map(joystick[IDX_JOY2_X], 0, 1023, 1000, 2000);
+	rcData[YAW] = map(joystick[IDX_JOY1_X], 0, 1023, 1000, 2000);
 	rcData[AUX1] = map(joystick[IDX_JOY_LEFT_BTN], 0, 1, 1000, 2000);
 	rcData[AUX2] = map(joystick[IDX_JOY_RIGHT_BTN], 0, 1, 1000, 2000);
 	rcData[AUX3] = map(joystick[IDX_JOY1BUTTON], 0, 1, 1000, 2000);
