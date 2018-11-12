@@ -7,17 +7,17 @@ void readJoystickData()
     // for your joysticks using the TestJoysticks sketch.
     if ( mode1 ) 
     {
-        radioData.throttle = mapJoystickValues( analogRead(A0), 180, 497, 807, true );
-        radioData.yaw      = mapJoystickValues( analogRead(A3), 165, 564, 906, false );
-        radioData.pitch    = mapJoystickValues( analogRead(A2), 136, 462, 779, true );
-        radioData.roll     = mapJoystickValues( analogRead(A1), 109, 460, 848, true );
+        radioData.throttle = mapJoystickValues( analogRead(A0), THROTTLE_RANGE, true );
+        radioData.yaw      = mapJoystickValues( analogRead(A3), YAW_RANGE, false );
+        radioData.pitch    = mapJoystickValues( analogRead(A2), PITCH_RANGE, true );
+        radioData.roll     = mapJoystickValues( analogRead(A1), ROLL_RANGE, true );
     }
     else 
     {
-        radioData.throttle = mapJoystickValues( analogRead(A0), 180, 497, 807, false );
-        radioData.yaw      = mapJoystickValues( analogRead(A1), 109, 460, 848, false );
-        radioData.pitch    = mapJoystickValues( analogRead(A2), 136, 462, 779, false );
-        radioData.roll     = mapJoystickValues( analogRead(A3), 165, 564, 906, true );
+        radioData.throttle = mapJoystickValues( analogRead(A0), THROTTLE_RANGE, false );
+        radioData.yaw      = mapJoystickValues( analogRead(A1), YAW_RANGE, false );
+        radioData.pitch    = mapJoystickValues( analogRead(A2), PITCH_RANGE, false );
+        radioData.roll     = mapJoystickValues( analogRead(A3), ROLL_RANGE, true );
     }
 }
 void readSwitchData()

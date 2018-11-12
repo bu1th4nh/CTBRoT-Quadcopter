@@ -12,7 +12,7 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include "printf.h"
-
+#include "analog_range.h"
 
 //------------------------------------------------------------------------
 //Macroes
