@@ -1,5 +1,5 @@
 /*  
-        A basic 4 channel transmitter using the nRF24L01 module. Coded by bu1th4nh
+        A basic multi-channel transmitter using the nRF24L01 module. Coded by bu1th4nh
         Special thanks to iforce2d YT Channel. Visit his channel here: https://www.youtube.com/channel/UCTXOorupCLqqQifs2jbz7rQ
 
         The telemetry feature is still WIP and will be updated in the near future
@@ -12,12 +12,12 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 #include "printf.h"
-#include "analog_range.h"
+
 
 //------------------------------------------------------------------------
 //Macroes
-#define RF24_CSN 10
-#define RF24_CE  9
+#define RF24_CSN 9
+#define RF24_CE  8
 #define SW1 A6
 #define SW2 A7
 #define SW3_L  8
@@ -28,7 +28,7 @@
 #define BUTT_R 3
 
 
-const uint8_t pipeAddress[] = "CTBer";
+const byte pipeAddress[] = "CTBers";
 //------------------------------------------------------------------------
 //Data and ACK packets
 //Main Data Packet - The sizeof this struct should not exceed 32 bytes
@@ -68,7 +68,7 @@ unsigned long lastPPS = 0;
 AckPayload ackPayload;
 RadioData radioData;
 
-//#define __AUTO_ACK___
+//#define _AUTO_ACK__
 
 
 //------------------------------------------------------------------------
@@ -78,16 +78,17 @@ RadioData radioData;
 //Setup
 void setup()
 {
-    Serial.begin(57600);
-    printf_begin();
-    
-    
     radio.begin();
+    Serial.begin(115200);
+    printf_begin();
+    radio.printDetails();
+    
+    
     radio.openWritingPipe(pipeAddress);
     radio.setDataRate(RF24_250KBPS);
     radio.setPALevel(RF24_PA_MAX);
 
-    #ifdef __AUTO_ACK___
+    #ifdef _AUTO_ACK__
         radio.setAutoAck(1);                    //Ensure autoACK is enabled
         radio.enableAckPayload();               //Allow optional ack payloads
         radio.enableDynamicPayloads();
@@ -95,6 +96,7 @@ void setup()
         radio.setAutoAck(false);
     #endif
 
+    radio.printDetails();
     radio.stopListening();
     radio.printDetails();
     resetRadioData();
@@ -116,4 +118,3 @@ void loop()
     adjustAckPayloadValues();
     writeDataToSerial();
 }
-

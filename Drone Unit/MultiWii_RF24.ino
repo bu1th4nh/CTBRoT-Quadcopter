@@ -52,7 +52,7 @@ struct AckPayload
 };
 
 
-const uint8_t pipe[] = "CTBer"; // Define the transmit pipe
+const byte pipeAddress[] = "CTBers"; // Define the transmit pipe
 RF24 radio(CE_PIN, CSN_PIN); // Create a Radio
 extern int16_t rcData[RC_CHANS];
 extern volatile int16_t failsafeCnt;
@@ -70,6 +70,10 @@ void resetData()
 void configureNrfReceiver() 
 {
 	radio.begin();
+	radio.openReadingPipe(0, pipeAddress);
+	radio.setDataRate(RF24_250KBPS);
+	radio.setPALevel(RF24_PA_MAX);
+	radio.startListening();
 
     #ifdef __AUTO_ACK___
         radio.setAutoAck(1);                    //Ensure autoACK is enabled
@@ -79,8 +83,9 @@ void configureNrfReceiver()
         radio.setAutoAck(false);
     #endif
 
-	radio.openReadingPipe(1, pipe);
-	radio.startListening();
+
+	pinMode(26, OUTPUT);
+	pinMode(27, OUTPUT);
 }
 
 /**************************************************************************************/
@@ -94,11 +99,20 @@ void computeNrfRC()
 		// Read the data payload until we've received everything
 		// Fetch the data payload
 		radio.read(&radioData, sizeof(RadioData));
+		// Serial.print("Yaw:      \t"); Serial.println(radioData.yaw);
+		// Serial.print("Roll:     \t"); Serial.println(radioData.roll);
+		// Serial.print("Pitch:    \t"); Serial.println(radioData.pitch);
+		// Serial.print("Throttle: \t"); Serial.println(radioData.throttle);
+		// Serial.println("");
+		digitalWrite(26, 1);
+		digitalWrite(27, 0);
 	}
 	else
 	{
+		digitalWrite(26, 0);
+		digitalWrite(27, 1);
 		return;
-		//Serial.println("No radio available");
+		// Serial.println("No radio available");
 	}
 
 
