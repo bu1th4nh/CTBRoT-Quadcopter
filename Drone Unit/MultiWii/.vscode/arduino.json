@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:mega",
+    "sketch": "MultiWii.ino",
+    "configuration": "cpu=atmega2560",
+    "port": "COM5"
+}
