@@ -66,6 +66,8 @@ RF24 radio(RF24_CE, RF24_CSN);
 int pps = 0, ppsCounter = 0;
 unsigned long lastPPS = 0;
 
+int dbThrot, dbYaw, dbPitch, dbRoll;
+
 AckPayload ackPayload;
 RadioData radioData;
 
@@ -116,6 +118,9 @@ void loop()
     readJoystickData();
     readSwitchData();
     DataTrans();
+
+    debugData();
+
     adjustAckPayloadValues();
     writeDataToSerial();
 }

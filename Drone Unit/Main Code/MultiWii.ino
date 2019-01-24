@@ -99,15 +99,19 @@ void computeNrfRC()
 	if (radio.available())
 	{
 		// Read the data payload until we've received everything
-		// Fetch the data payload
 		radio.read(&radioData, sizeof(RadioData));
+		digitalWrite(26, 1);
+		digitalWrite(27, 0);
+
+
+		// Fetch the data payload
+
+		// Debug:
 		// Serial.print("Yaw:      \t"); Serial.println(radioData.yaw);
 		// Serial.print("Roll:     \t"); Serial.println(radioData.roll);
 		// Serial.print("Pitch:    \t"); Serial.println(radioData.pitch);
 		// Serial.print("Throttle: \t"); Serial.println(radioData.throttle);
 		// Serial.println("");
-		digitalWrite(26, 1);
-		digitalWrite(27, 0);
 	}
 	else
 	{
@@ -128,34 +132,14 @@ void computeNrfRC()
 
 
 	#ifdef __OPTIONAL_FEATURE__
-		if((radioData.switch_1 >> 0) & 1) 
-		{
-			digitalWrite(LED_PIN_G1, 1);
-		}
-		else if((radioData.switch_1 >> 2) & 1)
-		{
-			digitalWrite(LED_PIN_R1, 1);
-		}
-		else 
-		{
-			digitalWrite(LED_PIN_R1, 0);
-			digitalWrite(LED_PIN_G1, 0);
-		}
+		if((radioData.switch_1 >> 0) & 1)      digitalWrite(LED_PIN_G1, 1);
+		else if((radioData.switch_1 >> 2) & 1) digitalWrite(LED_PIN_R1, 1);
+		else { digitalWrite(LED_PIN_R1, 0);    digitalWrite(LED_PIN_G1, 0); }
 
 		
-		if((radioData.switch_2 >> 3) & 1) 
-		{
-			digitalWrite(LED_PIN_G2, 1);
-		}
-		else if((radioData.switch_2 >> 5) & 1)
-		{
-			digitalWrite(LED_PIN_R2, 1);
-		}
-		else 
-		{
-			digitalWrite(LED_PIN_R2, 0);
-			digitalWrite(LED_PIN_G2, 0);
-		}
+		if((radioData.switch_2 >> 3) & 1)      digitalWrite(LED_PIN_G2, 1);
+		else if((radioData.switch_2 >> 5) & 1) digitalWrite(LED_PIN_R2, 1);
+		else { digitalWrite(LED_PIN_R2, 0);    digitalWrite(LED_PIN_G2, 0); }
 	#endif
 
 

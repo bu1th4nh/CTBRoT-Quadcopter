@@ -7,17 +7,17 @@ void readJoystickData()
     // for your joysticks using the TestJoysticks sketch.
     if ( mode1 ) 
     {
-        radioData.throttle = mapJoystickValues( analogRead(A0), THROTTLE_RANGE, true );
-        radioData.yaw      = mapJoystickValues( analogRead(A3), YAW_RANGE, false );
-        radioData.pitch    = mapJoystickValues( analogRead(A2), PITCH_RANGE, true );
-        radioData.roll     = mapJoystickValues( analogRead(A1), ROLL_RANGE, true );
+        radioData.throttle = mapJoystickValues(dbThrot = analogRead(A0), THROTTLE_RANGE, true );
+        radioData.yaw      = mapJoystickValues(dbYaw   = analogRead(A3), YAW_RANGE, false );
+        radioData.pitch    = mapJoystickValues(dbPitch = analogRead(A2), PITCH_RANGE, true );
+        radioData.roll     = mapJoystickValues(dbRoll  = analogRead(A1), ROLL_RANGE, true );
     }
     else 
     {
-        radioData.throttle = mapJoystickValues( analogRead(A0), THROTTLE_RANGE, false );
-        radioData.yaw      = mapJoystickValues( analogRead(A1), YAW_RANGE, false );
-        radioData.pitch    = mapJoystickValues( analogRead(A2), PITCH_RANGE, false );
-        radioData.roll     = mapJoystickValues( analogRead(A3), ROLL_RANGE, true );
+        radioData.throttle = mapJoystickValues(dbThrot = analogRead(A0), THROTTLE_RANGE, false );
+        radioData.yaw      = mapJoystickValues(dbYaw   = analogRead(A1), YAW_RANGE, false );
+        radioData.pitch    = mapJoystickValues(dbPitch = analogRead(A2), PITCH_RANGE, false );
+        radioData.roll     = mapJoystickValues(dbRoll  = analogRead(A3), ROLL_RANGE, true );
     }
 }
 void readSwitchData()
@@ -77,4 +77,23 @@ void DataTrans()
             lastPPS = now;
         }
     #endif
+}
+
+
+//Debug
+void debugData()
+{
+    int yaw    = map(radioData.yaw, 0, 255, 1000, 2000);
+	int throt  = map(radioData.throttle, 0, 255, 1000, 2000);
+	int roll   = map(radioData.roll, 0, 255, 1000, 2000);
+	int pitch  = map(radioData.pitch, 0, 255, 1000, 2000);
+
+
+    Serial.print("Sensor|Trans|Microsec: \t");
+    Serial.print("Throt: "); Serial.print(dbThrot); Serial.print("|"); Serial.print(radioData.throttle);  Serial.print("|"); Serial.print(throt);   Serial.print("\t");
+    Serial.print("Yaw: "); Serial.print(dbYaw);     Serial.print("|"); Serial.print(radioData.yaw);       Serial.print("|"); Serial.print(yaw);     Serial.print("\t");
+    Serial.print("Roll: "); Serial.print(dbRoll);   Serial.print("|"); Serial.print(radioData.roll);      Serial.print("|"); Serial.print(roll);    Serial.print("\t");
+    Serial.print("Pitch: "); Serial.print(dbPitch); Serial.print("|"); Serial.print(radioData.pitch);     Serial.print("|"); Serial.print(pitch);   Serial.print("\t");
+    Serial.println(";");
+
 }
